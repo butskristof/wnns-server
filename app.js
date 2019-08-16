@@ -25,13 +25,16 @@ const relayDetails = require("./config/relayDetails");
 });
 
 app.use((req, res, next) => {
-	if (checkToken(req.headers['authorization'])) {
-		next();
-	} else {
-		return res
-			.status(401)
-			.send();
+	if (req.method === "POST") {
+		if (!checkToken(req.headers['authorization'])) {
+			// send unauthorized response
+			return res
+				.status(401)
+				.send();
+		}
 	}
+
+	next();
 });
 
 require("./app/routes")(app, appData);
