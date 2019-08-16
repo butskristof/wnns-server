@@ -11,3 +11,4 @@
 **/*.DotSettings.user
 **/.vscode/
 !**/.vscode/launch.json
+**/secrets.json
