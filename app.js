@@ -2,18 +2,27 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+
+const appData = {
+	relays: {},
+	gpsData: {
+		lat: 0,
+		long: 0,
+		speed: 0 // kph
+	}
+};
 
 // initialise array with relay values, initially all are off
 const relayDetails = require("./config/relayDetails");
-const relays = {};
 // loop through 0-7 and initialise with 0
 [...Array(relayDetails.numberOfRelays).keys()].forEach(k => {
-	relays[k] = relayDetails.initValue;
+	appData.relays[k] = relayDetails.initValue;
 });
 
-require("./app/routes")(app, relays);
+require("./app/routes")(app, appData);
 
 app.listen(port, () => {
 	console.log(`Server running on port ${port}.`)
